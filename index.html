@@ -7,7 +7,7 @@
 <style>
 body {
   font-family: Arial, sans-serif;
-  background: #4caf50; /* zielone tło cały czas */
+  background: #4caf50; /* całe tło zielone */
   text-align: center;
   padding: 20px;
   overflow-x: hidden;
@@ -24,6 +24,7 @@ button { padding: 10px 20px; margin: 10px; font-size: 16px; cursor: pointer; }
   border-radius: 12px;
   display: inline-block;
   opacity: 0;
+  transform: scale(1);
   transition: opacity 0.5s, transform 0.5s;
 }
 .cifra.show {
@@ -98,7 +99,7 @@ const presents = {
   "💍": "462"
 };
 
-// Pula 20 pytań
+// 20 pytań
 const questionsPool = [
   {q:"Ile nóg ma renifer?", a:["4","2","6"], correct:"4"},
   {q:"Jakiego koloru jest zwykle strój Mikołaja?", a:["Czerwony","Zielony","Niebieski"], correct:"Czerwony"},
@@ -157,10 +158,10 @@ function showQuestion(){
 
 function checkAnswer(answer, correct){
   if(answer===correct){
-    const currentDigit = digitsRevealed;
-    digitsRevealed++;             // zwiększamy najpierw
-    revealDigit(currentDigit);     // pokazujemy cyfrę
-    launchConfetti();              // wystrzał konfetti
+    const currentDigit = digitsRevealed; // zachowaj aktualny indeks
+    digitsRevealed++;                     // zwiększ przed pokazaniem cyfry
+    revealDigit(currentDigit);            // pokaż cyfrę od razu
+    launchConfetti();                     // wystrzał konfetti
     setTimeout(()=>{ showQuestion(); }, 500);
   } else {
     alert("Spróbuj jeszcze raz!");
@@ -169,11 +170,16 @@ function checkAnswer(answer, correct){
 
 function revealDigit(index){
   const codeDiv = document.getElementById("code");
-  if(codeDiv.children[index]) return; // jeśli już istnieje
+  if(codeDiv.children[index]) return;
   const span = document.createElement("span");
-  span.className = "cifra show";
+  span.className = "cifra";
   span.innerText = code[index];
   codeDiv.appendChild(span);
+
+  // wymuszenie animacji show
+  requestAnimationFrame(() => {
+    span.classList.add("show");
+  });
 }
 
 function showCode(){
