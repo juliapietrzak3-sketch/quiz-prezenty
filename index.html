@@ -130,7 +130,7 @@ let questions = [];
 
 function startQuiz(symbol){
   selectedSymbol = symbol;
-  code = presents[symbol].split(''); // zamiana string -> tablica
+  code = presents[symbol].split(''); // string -> tablica
   digitsRevealed = 0;
   questions = shuffleArray([...questionsPool]).slice(0,3);
   document.getElementById("symbolSelection").style.display="none";
@@ -158,10 +158,9 @@ function showQuestion(){
 
 function checkAnswer(answer, correct){
   if(answer===correct){
-    const currentDigit = digitsRevealed;
-    digitsRevealed++;
-    revealDigit(currentDigit); // teraz na pewno pokaże cyfrę
+    revealDigit(digitsRevealed); // cyfra pojawia się od razu
     launchConfetti();
+    digitsRevealed++;
     setTimeout(()=>{ showQuestion(); }, 500);
   } else {
     alert("Spróbuj jeszcze raz!");
@@ -172,10 +171,9 @@ function revealDigit(index){
   const codeDiv = document.getElementById("code");
   if(codeDiv.children[index]) return;
   const span = document.createElement("span");
-  span.className = "cifra";
+  span.className = "cifra show"; // od razu show
   span.innerText = code[index];
   codeDiv.appendChild(span);
-  setTimeout(()=>{ span.classList.add("show"); }, 50); // pewne pojawienie się animacji
 }
 
 function showCode(){
