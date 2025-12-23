@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+<meta charset="UTF-8">
+<title>Świąteczna Misja: Otwórz Prezent!</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<style>
+body {
+  font-family: Arial, sans-serif;
+  background: linear-gradient(135deg, #0f5132, #198754);
+  color: white;
+  text-align: center;
+  padding: 20px;
+}
+button {
+  padding: 12px 20px;
+  margin: 8px;
+  font-size: 16px;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+}
+.card {
+  background: rgba(255,255,255,0.15);
+  padding: 20px;
+  border-radius: 15px;
+  margin-top: 20px;
+}
+.lock {
+  font-size: 38px;
+  letter-spacing: 14px;
+  margin: 20px 0;
+}
+.hidden {
+  color: rgba(255,255,255,0.25);
+}
+.flash {
+  animation: flash 0.6s ease;
+}
+@keyframes flash {
+  0% { transform: scale(1); color: #fff; }
+  50% { transform: scale(1.4); color: gold; }
+  100% { transform: scale(1); color: #fff; }
+}
+.open {
+  animation: open 1s ease forwards;
+}
+@keyframes open {
+  from { transform: scale(1); }
+  to { transform: scale(1.2) rotate(5deg); color: gold; }
+}
+input {
+  padding: 10px;
+  font-size: 16px;
+  border-radius: 8px;
+  border: none;
+  text-align: center;
+}
+</style>
+</head>
+<body>
+
+<h1>🎄 Świąteczna Misja: Otwórz Prezent! 🎁</h1>
+
+<div id="start" class="card">
+  <h2>Wybierz swój prezent</h2>
+  <div id="buttons"></div>
+</div>
+
+<div id="quiz" class="card" style="display:none;">
+  <div class="lock">
+    <span id="d1" class="hidden">●</span>
+    <span id="d2" class="hidden">●</span>
+    <span id="d3" class="hidden">●</span>
+  </div>
+  <h2 id="question"></h2>
+  <input id="answer" placeholder="Twoja odpowiedź">
+  <br><br>
+  <button onclick="check()">Sprawdź</button>
+</div>
+
+<div id="end" class="card" style="display:none;">
+  <h2>🔓 Kłódka otwarta!</h2>
+  <div class="lock open" id="finalCode"></div>
+  <p>🎉 Otwórz swój prezent!</p>
+</div>
+
+<script>
+function randomCode() {
+  return Math.floor(100 + Math.random() * 900).toString();
+}
+
+const presents = {
+  "Karolina & Piotr": randomCode(),
+  "Kamil & Anna": randomCode(),
+  "Ciocia Jola": randomCode(),
+  "Ciocia Ela": randomCode(),
+  "Jakub": randomCode(),
+  "Babcia Ala": randomCode(),
+  "Babcia Jadzia": randomCode(),
+  "Wujek Sławek": randomCode(),
+  "Julia": randomCode(),
+  "Alicja": randomCode(),
+  "Tomasz": randomCode(),
+  "Joanna": randomCode(),
+  "Mateusz": randomCode(),
+  "Joanna & Mateusz": randomCode()
+};
+
+const questions = [
+  { q: "🎅 Ile reniferów ciągnie sanie Świętego Mikołaja?", a: "9" },
+  { q: "🎄 Jeśli są 4 czerwone, 3 złote i 2 srebrne bombki – ile NIE jest zielonych?", a: "9" },
+  { q: "❄️ Który miesiąc ma 28 dni?", a: "wszystkie" }
+];
+
+let code = "";
+let step = 0;
+
+const btns = document.getElementById("buttons");
+for (let p in presents) {
+  const b = document.createElement("button");
+  b.textContent = p;
+  b.onclick = () => startQuiz(p);
+  btns.appendChild(b);
+}
+
+function startQuiz(p) {
+  code = presents[p];
+  document.getElementById("start").style.display = "none";
+  document.getElementById("quiz").style.display = "block";
+  showQuestion();
+}
+
+function showQuestion() {
+  document.getElementById("question").textContent = questions[step].q;
+  document.getElementById("answer").value = "";
+}
+
+function check() {
+  const val = document.getElementById("answer").value.trim().toLowerCase();
+  if (val === questions[step].a) {
+    const el = document.getElementById("d" + (step+1));
+    el.textContent = code[step];
+    el.classList.remove("hidden");
+    el.classList.add("flash");
+    step++;
+    if (step < 3) showQuestion();
+    else finish();
+  } else {
+    alert("❌ Spróbuj jeszcze raz!");
+  }
+}
+
+function finish() {
+  document.getElementById("quiz").style.display = "none";
+  document.getElementById("end").style.display = "block";
+  document.getElementById("finalCode").textContent = code.split("").join(" ");
+}
+</script>
+
+</body>
+</html>
+
