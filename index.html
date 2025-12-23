@@ -7,10 +7,9 @@
 <style>
 body {
   font-family: Arial, sans-serif;
-  background: #4caf50; /* zielone tło od początku quizu */
+  background: #4caf50; /* całe tło zielone */
   text-align: center;
   padding: 20px;
-  transition: background-color 0.5s;
   overflow-x: hidden;
 }
 h1 { color: #fff; }
@@ -24,12 +23,12 @@ button { padding: 10px 20px; margin: 10px; font-size: 16px; cursor: pointer; }
   padding: 15px 20px;
   border-radius: 12px;
   display: inline-block;
-  transition: transform 0.5s, opacity 0.5s;
   opacity: 0;
+  transition: opacity 0.5s, transform 0.5s;
 }
 .cifra.show {
-  transform: scale(1.8);
   opacity: 1;
+  transform: scale(1.8);
 }
 #quiz { margin-top: 20px; }
 #code { margin-top: 20px; }
@@ -99,7 +98,7 @@ const presents = {
   "💍": "462"
 };
 
-// 20 pytań quizu
+// 20 pytań
 const questionsPool = [
   {q:"Ile nóg ma renifer?", a:["4","2","6"], correct:"4"},
   {q:"Jakiego koloru jest zwykle strój Mikołaja?", a:["Czerwony","Zielony","Niebieski"], correct:"Czerwony"},
@@ -158,10 +157,10 @@ function showQuestion(){
 
 function checkAnswer(answer, correct){
   if(answer===correct){
-    revealDigit(digitsRevealed); // natychmiast odsłania cyfrę
-    launchConfetti();             // konfetti
+    revealDigit(digitsRevealed); // od razu pokaż cyfrę
+    launchConfetti();
     digitsRevealed++;
-    setTimeout(()=>{ showQuestion(); }, 500); // przejście do następnego pytania
+    setTimeout(()=>{ showQuestion(); }, 500);
   } else {
     alert("Spróbuj jeszcze raz!");
   }
@@ -169,6 +168,7 @@ function checkAnswer(answer, correct){
 
 function revealDigit(index){
   const codeDiv = document.getElementById("code");
+  // jeśli cyfra już istnieje, nie dodawaj nowej
   if(codeDiv.children[index]) return;
   const span = document.createElement("span");
   span.className = "cifra show";
@@ -195,6 +195,7 @@ function launchConfetti(amount=10){
   }
 }
 
+// Losowanie tablicy
 function shuffleArray(array){
   for(let i=array.length-1;i>0;i--){
     const j = Math.floor(Math.random()*(i+1));
@@ -206,3 +207,4 @@ function shuffleArray(array){
 
 </body>
 </html>
+
