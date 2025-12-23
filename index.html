@@ -7,7 +7,8 @@
 <style>
 body {
   font-family: Arial, sans-serif;
-  background: #4caf50; /* całe tło zielone */
+  background: #4caf50; /* zielone tło świąteczne */
+  color: #fff;
   text-align: center;
   padding: 20px;
   overflow-x: hidden;
@@ -99,7 +100,7 @@ const presents = {
   "💍": "462"
 };
 
-// 20 pytań
+// 20 pytań (proste i trudniejsze)
 const questionsPool = [
   {q:"Ile nóg ma renifer?", a:["4","2","6"], correct:"4"},
   {q:"Jakiego koloru jest zwykle strój Mikołaja?", a:["Czerwony","Zielony","Niebieski"], correct:"Czerwony"},
@@ -158,9 +159,9 @@ function showQuestion(){
 
 function checkAnswer(answer, correct){
   if(answer===correct){
-    revealDigit(digitsRevealed); // cyfra pojawia się od razu
-    launchConfetti();
+    revealDigit(digitsRevealed); // pokaż cyfrę od razu
     digitsRevealed++;
+    launchConfetti();
     setTimeout(()=>{ showQuestion(); }, 500);
   } else {
     alert("Spróbuj jeszcze raz!");
