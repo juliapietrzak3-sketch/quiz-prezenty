@@ -124,13 +124,13 @@ const questionsPool = [
 ];
 
 let selectedSymbol = "";
-let code = "";
+let code = [];
 let digitsRevealed = 0;
 let questions = [];
 
 function startQuiz(symbol){
   selectedSymbol = symbol;
-  code = presents[symbol];
+  code = presents[symbol].split(''); // zamiana string -> tablica
   digitsRevealed = 0;
   questions = shuffleArray([...questionsPool]).slice(0,3);
   document.getElementById("symbolSelection").style.display="none";
@@ -158,10 +158,10 @@ function showQuestion(){
 
 function checkAnswer(answer, correct){
   if(answer===correct){
-    const currentDigit = digitsRevealed; // zachowaj aktualny indeks
-    digitsRevealed++;                     // zwiększ przed pokazaniem cyfry
-    revealDigit(currentDigit);            // pokaż cyfrę od razu
-    launchConfetti();                     // wystrzał konfetti
+    const currentDigit = digitsRevealed;
+    digitsRevealed++;
+    revealDigit(currentDigit); // teraz na pewno pokaże cyfrę
+    launchConfetti();
     setTimeout(()=>{ showQuestion(); }, 500);
   } else {
     alert("Spróbuj jeszcze raz!");
@@ -175,11 +175,7 @@ function revealDigit(index){
   span.className = "cifra";
   span.innerText = code[index];
   codeDiv.appendChild(span);
-
-  // wymuszenie animacji show
-  requestAnimationFrame(() => {
-    span.classList.add("show");
-  });
+  setTimeout(()=>{ span.classList.add("show"); }, 50); // pewne pojawienie się animacji
 }
 
 function showCode(){
@@ -188,7 +184,6 @@ function showCode(){
   launchConfetti(20);
 }
 
-// Konfetti
 function launchConfetti(amount=10){
   for(let i=0;i<amount;i++){
     const conf = document.createElement("div");
@@ -201,7 +196,6 @@ function launchConfetti(amount=10){
   }
 }
 
-// Losowanie pytań
 function shuffleArray(array){
   for(let i=array.length-1;i>0;i--){
     const j = Math.floor(Math.random()*(i+1));
