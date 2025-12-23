@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+<meta charset="UTF-8">
+<title>Świąteczny Quiz - Otwórz Prezent!</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<style>
+body {
+  font-family: Arial, sans-serif;
+  background: #4caf50; /* zielone tło świąteczne */
+  color: #fff;
+  text-align: center;
+  padding: 20px;
+  overflow-x: hidden;
+}
+h1 { color: #fff; }
+button { padding: 10px 20px; margin: 10px; font-size: 16px; cursor: pointer; }
+.cifra {
+  font-size: 32px;
+  font-weight: bold;
+  color: white;
+  background-color: #2e7d32;
+  margin: 15px;
+  padding: 15px 20px;
+  border-radius: 12px;
+  display: inline-block;
+  opacity: 0;
+  transform: scale(1);
+  transition: opacity 0.5s, transform 0.5s;
+}
+.cifra.show {
+  opacity: 1;
+  transform: scale(1.8);
+}
+#quiz { margin-top: 20px; }
+#code { margin-top: 20px; }
+.confetti {
+  position: absolute;
+  width: 10px;
+  height: 10px;
+  top: 0;
+  pointer-events: none;
+  opacity: 0.8;
+  animation: fall 3s linear forwards;
+}
+@keyframes fall {
+  0% { transform: translateY(0) rotate(0deg); }
+  100% { transform: translateY(500px) rotate(360deg); opacity:0; }
+}
+</style>
+</head>
+<body>
+
+<h1>🎄 Świąteczny Quiz - Otwórz Prezent! 🎁</h1>
+
+<div id="symbolSelection">
+  <p>Wybierz swój symbol prezentu:</p>
+  <button onclick="startQuiz('🎄')">🎄</button>
+  <button onclick="startQuiz('⭐')">⭐</button>
+  <button onclick="startQuiz('🔔')">🔔</button>
+  <button onclick="startQuiz('❄️')">❄️</button>
+  <button onclick="startQuiz('🦌')">🦌</button>
+  <button onclick="startQuiz('🎅')">🎅</button>
+  <button onclick="startQuiz('⛄')">⛄</button>
+  <button onclick="startQuiz('🎁')">🎁</button>
+  <button onclick="startQuiz('🕯️')">🕯️</button>
+  <button onclick="startQuiz('🍪')">🍪</button>
+  <button onclick="startQuiz('🧦')">🧦</button>
+  <button onclick="startQuiz('❤️')">❤️</button>
+  <button onclick="startQuiz('🔑')">🔑</button>
+  <button onclick="startQuiz('💍')">💍</button>
+</div>
+
+<div id="quiz" style="display:none;">
+  <p id="question"></p>
+  <div id="answers"></div>
+</div>
+
+<div id="result" style="display:none;">
+  <p>Twój kod do kłódki:</p>
+  <div id="code"></div>
+</div>
+
+<script>
+// Kody do prezentów
+const presents = {
+  "🎄": "528",
+  "⭐": "394",
+  "🔔": "712",
+  "❄️": "861",
+  "🦌": "247",
+  "🎅": "905",
+  "⛄": "138",
+  "🎁": "476",
+  "🕯️": "329",
+  "🍪": "684",
+  "🧦": "570",
+  "❤️": "213",
+  "🔑": "897",
+  "💍": "462"
+};
+
+// 20 pytań (proste i trudniejsze)
+const questionsPool = [
+  {q:"Ile nóg ma renifer?", a:["4","2","6"], correct:"4"},
+  {q:"Jakiego koloru jest zwykle strój Mikołaja?", a:["Czerwony","Zielony","Niebieski"], correct:"Czerwony"},
+  {q:"Ile reniferów ciągnie sanie Świętego Mikołaja?", a:["9","8","7"], correct:"8"},
+  {q:"Jakiego koloru są zwykle bombki choinkowe?", a:["Różne","Tylko czerwone","Tylko złote"], correct:"Różne"},
+  {q:"Jak nazywa się pomocnik Mikołaja?", a:["Elf","Gnom","Krasnal"], correct:"Elf"},
+  {q:"Co wiesz o tradycji wieszania skarpet na prezenty?", a:["Prawda","Fałsz"], correct:"Prawda"},
+  {q:"Co wkładamy pod obrus w Wigilię w Polsce?", a:["Sianko","Piasek","Liście"], correct:"Sianko"},
+  {q:"Która roślina jest symbolem świąt i wieszana nad drzwiami?", a:["Ostrokrzew","Róża","Tulipan"], correct:"Ostrokrzew"},
+  {q:"Jakiego zwierzęcia nie znajdziesz na tradycyjnej choince?", a:["Ryba","Renifer","Sowa"], correct:"Ryba"},
+  {q:"Jak nazywa się świąteczny napój z cynamonem?", a:["Grzaniec","Herbata","Sok"], correct:"Grzaniec"},
+  {q:"Jakiego koloru jest zwykle bombka w kształcie gwiazdy?", a:["Złota","Czerwona","Srebrna"], correct:"Złota"},
+  {q:"Co robimy przy kolędzie „Cicha noc”?", a:["Śpiewamy","Tańczymy","Rysujemy"], correct:"Śpiewamy"},
+  {q:"Ile świec jest w wieńcu adwentowym?", a:["4","3","5"], correct:"4"},
+  {q:"Ile dni ma grudzień?", a:["31","30","28"], correct:"31"},
+  {q:"Ile osób spotyka się przy wigilijnym stole?", a:["Rodzina","Każdy osobno","Sąsiedzi"], correct:"Rodzina"},
+  {q:"Co symbolizuje Gwiazda Betlejemska?", a:["Nadzieję","Prezent","Śnieg"], correct:"Nadzieję"},
+  {q:"Ile prezentów przynosi Święty Mikołaj?", a:["Różnie","2","0"], correct:"Różnie"},
+  {q:"Jak nazywa się niemiecki piernik świąteczny?", a:["Lebkuchen","Panettone","Stollen"], correct:"Lebkuchen"},
+  {q:"W jakim kraju powstała pierwsza kartka świąteczna?", a:["Anglia","Niemcy","Polska"], correct:"Anglia"},
+  {q:"Ile gwiazd jest na niebie w wierszu „Dwanaście dni świąt”?", a:["12","10","8"], correct:"12"}
+];
+
+let selectedSymbol = "";
+let code = [];
+let digitsRevealed = 0;
+let questions = [];
+
+function startQuiz(symbol){
+  selectedSymbol = symbol;
+  code = presents[symbol].split(''); // string -> tablica
+  digitsRevealed = 0;
+  questions = shuffleArray([...questionsPool]).slice(0,3);
+  document.getElementById("symbolSelection").style.display="none";
+  document.getElementById("quiz").style.display="block";
+  document.getElementById("code").innerHTML = "";
+  showQuestion();
+}
+
+function showQuestion(){
+  if(digitsRevealed >= questions.length){
+    showCode();
+    return;
+  }
+  const q = questions[digitsRevealed];
+  document.getElementById("question").innerText = q.q;
+  const answersDiv = document.getElementById("answers");
+  answersDiv.innerHTML = "";
+  q.a.forEach(ans=>{
+    const btn = document.createElement("button");
+    btn.innerText = ans;
+    btn.onclick = ()=>checkAnswer(ans, q.correct);
+    answersDiv.appendChild(btn);
+  });
+}
+
+function checkAnswer(answer, correct){
+  if(answer===correct){
+    revealDigit(digitsRevealed); // pokaż cyfrę od razu
+    digitsRevealed++;
+    launchConfetti();
+    setTimeout(()=>{ showQuestion(); }, 500);
+  } else {
+    alert("Spróbuj jeszcze raz!");
+  }
+}
+
+function revealDigit(index){
+  const codeDiv = document.getElementById("code");
+  if(codeDiv.children[index]) return;
+  const span = document.createElement("span");
+  span.className = "cifra show"; // od razu show
+  span.innerText = code[index];
+  codeDiv.appendChild(span);
+}
+
+function showCode(){
+  document.getElementById("quiz").style.display="none";
+  document.getElementById("result").style.display="block";
+  launchConfetti(20);
+}
+
+function launchConfetti(amount=10){
+  for(let i=0;i<amount;i++){
+    const conf = document.createElement("div");
+    conf.className="confetti";
+    conf.style.left = Math.random()*window.innerWidth + "px";
+    conf.style.backgroundColor = `hsl(${Math.random()*360},100%,50%)`;
+    conf.style.animationDuration = 2 + Math.random()*2 + "s";
+    document.body.appendChild(conf);
+    setTimeout(()=>{ conf.remove(); }, 4000);
+  }
+}
+
+function shuffleArray(array){
+  for(let i=array.length-1;i>0;i--){
+    const j = Math.floor(Math.random()*(i+1));
+    [array[i],array[j]] = [array[j],array[i]];
+  }
+  return array;
+}
+</script>
+
+</body>
+</html>
