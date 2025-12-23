@@ -33,6 +33,10 @@ button{
 
 #quiz{margin-top:20px}
 
+#code{
+  margin-top:20px;
+}
+
 .cifra{
   font-size:40px;
   font-weight:bold;
@@ -50,8 +54,6 @@ button{
   opacity:1;
   transform:scale(1.2);
 }
-
-#code{margin-top:20px}
 
 .confetti{
   position:fixed;
@@ -94,10 +96,8 @@ button{
   <div id="answers"></div>
 </div>
 
-<div id="result" style="display:none">
-  <h2>🔐 Twój kod do kłódki</h2>
-  <div id="code"></div>
-</div>
+<h2>🔐 Twój kod do kłódki</h2>
+<div id="code"></div>
 
 <script>
 const presents={
@@ -125,7 +125,7 @@ const questionsPool=[
  {q:"Ile gwiazd w „12 dniach świąt”?",a:["12","10","8"],c:"12"},
  {q:"Jak nazywa się niemiecki piernik?",a:["Lebkuchen","Stollen","Panettone"],c:"Lebkuchen"},
  {q:"W jakim kraju powstała kartka świąteczna?",a:["Anglia","Polska","Niemcy"],c:"Anglia"},
- {q:"Co wieszamy na prezenty?",a:["Skarpety","Ręczniki","Torby"],c:"Skarpety"},
+ {q:"Co wieszamy na prezenty?",a:["Skarpety","Torby","Pudełka"],c:"Skarpety"},
  {q:"Czy grudzień jest zimą?",a:["Tak","Nie"],c:"Tak"}
 ];
 
@@ -144,7 +144,6 @@ function startQuiz(symbol){
 function showQuestion(){
   if(step>=questions.length){
     document.getElementById("quiz").style.display="none";
-    document.getElementById("result").style.display="block";
     confetti(25);
     return;
   }
