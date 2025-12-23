@@ -169,7 +169,7 @@ function checkAnswer(answer, correct){
 
 function revealDigit(index){
   const codeDiv = document.getElementById("code");
-  if(codeDiv.children[index]) return;
+  if(codeDiv.children[index]) return; // jeśli już istnieje
   const span = document.createElement("span");
   span.className = "cifra show";
   span.innerText = code[index];
