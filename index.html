@@ -30,6 +30,7 @@ button { padding: 10px 20px; margin: 10px; font-size: 16px; cursor: pointer; }
   opacity: 1;
 }
 #quiz { margin-top: 20px; }
+#code { margin-top: 15px; }
 </style>
 </head>
 <body>
@@ -65,7 +66,7 @@ button { padding: 10px 20px; margin: 10px; font-size: 16px; cursor: pointer; }
 </div>
 
 <script>
-// Stałe kody przypisane do symboli
+// Stałe kody dla symboli
 const presents = {
   "🎄": "528",
   "⭐": "394",
@@ -83,7 +84,7 @@ const presents = {
   "💍": "462"
 };
 
-// Pula 20 pytań (łatwe + trudniejsze)
+// 20 pytań (łatwe + trudniejsze)
 const questionsPool = [
   {q:"Ile nóg ma renifer?", a:["4","2","6"], correct:"4"},
   {q:"Jakiego koloru jest zwykle strój Mikołaja?", a:["Czerwony","Zielony","Niebieski"], correct:"Czerwony"},
@@ -119,7 +120,7 @@ function startQuiz(symbol){
   questions = shuffleArray([...questionsPool]).slice(0,3);
   document.getElementById("symbolSelection").style.display="none";
   document.getElementById("quiz").style.display="block";
-  document.getElementById("code").innerHTML = ""; // czyści poprzednie cyfry
+  document.getElementById("code").innerHTML = "";
   showQuestion();
 }
 
@@ -163,7 +164,7 @@ function showCode(){
   document.getElementById("result").style.display="block";
 }
 
-// Funkcja losująca tablicę
+// Losowanie tablicy
 function shuffleArray(array){
   for(let i=array.length-1;i>0;i--){
     const j = Math.floor(Math.random()*(i+1));
