@@ -83,7 +83,7 @@ button { padding: 10px 20px; margin: 10px; font-size: 16px; cursor: pointer; }
 </div>
 
 <script>
-// Stałe kody dla symboli
+// Kody do prezentów
 const presents = {
   "🎄": "528",
   "⭐": "394",
@@ -101,7 +101,7 @@ const presents = {
   "💍": "462"
 };
 
-// 20 pytań
+// 20 pytań quizu
 const questionsPool = [
   {q:"Ile nóg ma renifer?", a:["4","2","6"], correct:"4"},
   {q:"Jakiego koloru jest zwykle strój Mikołaja?", a:["Czerwony","Zielony","Niebieski"], correct:"Czerwony"},
@@ -202,7 +202,7 @@ function launchConfetti(amount=10){
   }
 }
 
-// Funkcja losująca tablicę
+// Losowanie tablicy
 function shuffleArray(array){
   for(let i=array.length-1;i>0;i--){
     const j = Math.floor(Math.random()*(i+1));
