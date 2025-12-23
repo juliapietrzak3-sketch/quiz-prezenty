@@ -7,10 +7,10 @@
 <style>
 body {
   font-family: Arial, sans-serif;
-  background: #4caf50; /* całe tło zielone od początku quizu */
+  background: #4caf50; /* zielone tło od początku quizu */
   text-align: center;
   padding: 20px;
-  transition: background-color 0.8s;
+  transition: background-color 0.5s;
   overflow-x: hidden;
 }
 h1 { color: #fff; }
@@ -158,12 +158,10 @@ function showQuestion(){
 
 function checkAnswer(answer, correct){
   if(answer===correct){
-    revealDigit(digitsRevealed);
-    launchConfetti();
+    revealDigit(digitsRevealed); // natychmiast odsłania cyfrę
+    launchConfetti();             // konfetti
     digitsRevealed++;
-    setTimeout(()=>{
-      showQuestion();
-    }, 500);
+    setTimeout(()=>{ showQuestion(); }, 500); // przejście do następnego pytania
   } else {
     alert("Spróbuj jeszcze raz!");
   }
@@ -171,6 +169,7 @@ function checkAnswer(answer, correct){
 
 function revealDigit(index){
   const codeDiv = document.getElementById("code");
+  if(codeDiv.children[index]) return;
   const span = document.createElement("span");
   span.className = "cifra show";
   span.innerText = code[index];
@@ -183,7 +182,7 @@ function showCode(){
   launchConfetti(20);
 }
 
-// Prosta funkcja konfetti
+// Konfetti
 function launchConfetti(amount=10){
   for(let i=0;i<amount;i++){
     const conf = document.createElement("div");
@@ -196,7 +195,6 @@ function launchConfetti(amount=10){
   }
 }
 
-// Losowanie tablicy
 function shuffleArray(array){
   for(let i=array.length-1;i>0;i--){
     const j = Math.floor(Math.random()*(i+1));
