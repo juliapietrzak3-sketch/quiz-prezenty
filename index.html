@@ -157,9 +157,10 @@ function showQuestion(){
 
 function checkAnswer(answer, correct){
   if(answer===correct){
-    revealDigit(digitsRevealed); // od razu pokaż cyfrę
-    launchConfetti();
-    digitsRevealed++;
+    const currentDigit = digitsRevealed;
+    digitsRevealed++;             // zwiększamy najpierw
+    revealDigit(currentDigit);     // pokazujemy cyfrę
+    launchConfetti();              // wystrzał konfetti
     setTimeout(()=>{ showQuestion(); }, 500);
   } else {
     alert("Spróbuj jeszcze raz!");
