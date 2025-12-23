@@ -8,111 +8,133 @@
 <style>
 body{
   margin:0;
-  font-family: Arial, sans-serif;
-  text-align:center;
-  background: linear-gradient(135deg,#2e7d32,#66bb6a);
   min-height:100vh;
+  font-family: Arial, sans-serif;
+  background: linear-gradient(135deg,#2e7d32,#66bb6a);
   color:white;
+  text-align:center;
+  padding:20px;
 }
 
-h1{ margin-top:20px; }
+h1{margin-bottom:10px}
 
 button{
-  padding:12px 20px;
-  margin:8px;
-  font-size:16px;
+  font-size:18px;
+  padding:10px 16px;
+  margin:6px;
   border:none;
   border-radius:10px;
   cursor:pointer;
 }
 
 #symbolSelection button{
-  font-size:22px;
+  font-size:26px;
 }
 
-#quiz, #result{
-  margin-top:30px;
-}
+#quiz{margin-top:20px}
 
 .cifra{
-  display:inline-block;
-  background:#1b5e20;
-  padding:18px 22px;
-  margin:10px;
-  font-size:32px;
+  font-size:40px;
   font-weight:bold;
-  border-radius:12px;
+  background:#1b5e20;
+  padding:14px 22px;
+  border-radius:14px;
+  margin:10px;
+  display:inline-block;
+  opacity:0;
+  transform:scale(0.5);
+  transition:all 0.4s ease;
+}
+
+.cifra.show{
+  opacity:1;
+  transform:scale(1.2);
+}
+
+#code{margin-top:20px}
+
+.confetti{
+  position:fixed;
+  width:10px;
+  height:10px;
+  top:-10px;
+  animation:fall 3s linear forwards;
+}
+
+@keyframes fall{
+  to{transform:translateY(110vh) rotate(360deg); opacity:0}
 }
 </style>
 </head>
 
 <body>
 
-<h1>🎁 Świąteczny Quiz 🎁</h1>
+<h1>🎁 Świąteczny Quiz – Otwórz Prezent 🎄</h1>
+<p>Wybierz swój symbol</p>
 
 <div id="symbolSelection">
-  <p>Wybierz swój symbol prezentu:</p>
   <button onclick="startQuiz('🎄')">🎄</button>
   <button onclick="startQuiz('⭐')">⭐</button>
   <button onclick="startQuiz('🎅')">🎅</button>
   <button onclick="startQuiz('❄️')">❄️</button>
   <button onclick="startQuiz('🎁')">🎁</button>
+  <button onclick="startQuiz('🔔')">🔔</button>
+  <button onclick="startQuiz('🦌')">🦌</button>
+  <button onclick="startQuiz('⛄')">⛄</button>
+  <button onclick="startQuiz('🕯️')">🕯️</button>
+  <button onclick="startQuiz('🍪')">🍪</button>
+  <button onclick="startQuiz('🧦')">🧦</button>
+  <button onclick="startQuiz('❤️')">❤️</button>
+  <button onclick="startQuiz('🔑')">🔑</button>
+  <button onclick="startQuiz('💍')">💍</button>
 </div>
 
-<div id="quiz" style="display:none;">
-  <p id="question"></p>
+<div id="quiz" style="display:none">
+  <h2 id="question"></h2>
   <div id="answers"></div>
 </div>
 
-<div id="result" style="display:none;">
-  <h2>Twój kod do prezentu:</h2>
+<div id="result" style="display:none">
+  <h2>🔐 Twój kod do kłódki</h2>
   <div id="code"></div>
 </div>
 
 <script>
-// KODY
-const presents = {
-  "🎄":"528",
-  "⭐":"394",
-  "🎅":"761",
-  "❄️":"842",
-  "🎁":"619"
+const presents={
+  "🎄":"528","⭐":"394","🎅":"761","❄️":"842","🎁":"619",
+  "🔔":"712","🦌":"247","⛄":"138","🕯️":"329","🍪":"684",
+  "🧦":"570","❤️":"213","🔑":"897","💍":"462"
 };
 
-// PYTANIA (20)
-const questionsPool = [
-  {q:"Ile dni ma grudzień?", a:["31","30","28"], c:"31"},
-  {q:"Jakiego koloru jest Mikołaj?", a:["Czerwony","Zielony","Niebieski"], c:"Czerwony"},
-  {q:"Co ubieramy na choince?", a:["Bombki","Buty","Książki"], c:"Bombki"},
-  {q:"Ile nóg ma renifer?", a:["4","2","6"], c:"4"},
-  {q:"Co pada zimą?", a:["Śnieg","Deszcz","Liście"], c:"Śnieg"},
-  {q:"Jak nazywa się kolęda?", a:["Cicha noc","Sto lat","Hej sokoły"], c:"Cicha noc"},
-  {q:"Co dajemy na prezenty?", a:["Papier","Gazetę","Ręcznik"], c:"Papier"},
-  {q:"Gdzie stawiamy choinkę?", a:["W domu","Na dachu","W łazience"], c:"W domu"},
-  {q:"Jakie zwierzę ciągnie sanie?", a:["Renifer","Koń","Pies"], c:"Renifer"},
-  {q:"Co pijemy zimą na ciepło?", a:["Herbatę","Lemoniadę","Colę"], c:"Herbatę"},
-  {q:"Ile jest Świąt w Boże Narodzenie?", a:["2","1","3"], c:"2"},
-  {q:"Co wkładamy pod obrus?", a:["Sianko","Piasek","Kamienie"], c:"Sianko"},
-  {q:"Jakiego koloru jest choinka?", a:["Zielona","Niebieska","Czarna"], c:"Zielona"},
-  {q:"Gdzie kładziemy prezenty?", a:["Pod choinką","Na dachu","W lodówce"], c:"Pod choinką"},
-  {q:"Co zapalamy na choince?", a:["Lampki","Świece","Latarki"], c:"Lampki"},
-  {q:"Kto przynosi prezenty?", a:["Mikołaj","Elf","Renifer"], c:"Mikołaj"},
-  {q:"Jaki jest miesiąc świąt?", a:["Grudzień","Styczeń","Listopad"], c:"Grudzień"},
-  {q:"Co śpiewamy w święta?", a:["Kolędy","Rap","Rock"], c:"Kolędy"},
-  {q:"Ile liter ma słowo ŚWIĘTA?", a:["6","5","7"], c:"6"},
-  {q:"Czy święta są zimą?", a:["Tak","Nie"], c:"Tak"}
+const questionsPool=[
+ {q:"Ile nóg ma renifer?",a:["4","2","6"],c:"4"},
+ {q:"Jakiego koloru jest strój Mikołaja?",a:["Czerwony","Zielony","Niebieski"],c:"Czerwony"},
+ {q:"Ile dni ma grudzień?",a:["31","30","28"],c:"31"},
+ {q:"Co wkładamy pod obrus w Wigilię?",a:["Sianko","Liście","Papier"],c:"Sianko"},
+ {q:"Ile świec jest w wieńcu adwentowym?",a:["4","3","5"],c:"4"},
+ {q:"Jak nazywa się pomocnik Mikołaja?",a:["Elf","Gnom","Krasnal"],c:"Elf"},
+ {q:"Jakiego koloru są bombki?",a:["Różne","Tylko czerwone","Tylko złote"],c:"Różne"},
+ {q:"Co robimy przy kolędzie?",a:["Śpiewamy","Tańczymy","Biegamy"],c:"Śpiewamy"},
+ {q:"Ile reniferów ciągnie sanie?",a:["8","9","7"],c:"8"},
+ {q:"Jaka roślina wisi nad drzwiami?",a:["Jemioła","Róża","Tulipan"],c:"Jemioła"},
+ {q:"Co symbolizuje Gwiazda Betlejemska?",a:["Nadzieję","Prezent","Śnieg"],c:"Nadzieję"},
+ {q:"Jakiego zwierzęcia nie ma na choince?",a:["Ryba","Renifer","Sowa"],c:"Ryba"},
+ {q:"Jak nazywa się grzany napój?",a:["Grzaniec","Sok","Herbata"],c:"Grzaniec"},
+ {q:"Ile prezentów przynosi Mikołaj?",a:["Różnie","0","1"],c:"Różnie"},
+ {q:"Jakiego koloru jest gwiazda?",a:["Złota","Niebieska","Zielona"],c:"Złota"},
+ {q:"Ile gwiazd w „12 dniach świąt”?",a:["12","10","8"],c:"12"},
+ {q:"Jak nazywa się niemiecki piernik?",a:["Lebkuchen","Stollen","Panettone"],c:"Lebkuchen"},
+ {q:"W jakim kraju powstała kartka świąteczna?",a:["Anglia","Polska","Niemcy"],c:"Anglia"},
+ {q:"Co wieszamy na prezenty?",a:["Skarpety","Ręczniki","Torby"],c:"Skarpety"},
+ {q:"Czy grudzień jest zimą?",a:["Tak","Nie"],c:"Tak"}
 ];
 
-let code = "";
-let questions = [];
-let index = 0;
+let code=[],questions=[],step=0;
 
-// START
 function startQuiz(symbol){
-  code = presents[symbol];
-  questions = shuffle([...questionsPool]).slice(0,3);
-  index = 0;
-
+  code=presents[symbol].split("");
+  step=0;
+  questions=shuffle([...questionsPool]).slice(0,3);
   document.getElementById("symbolSelection").style.display="none";
   document.getElementById("quiz").style.display="block";
   document.getElementById("code").innerHTML="";
@@ -120,44 +142,58 @@ function startQuiz(symbol){
 }
 
 function showQuestion(){
-  if(index >= questions.length){
+  if(step>=questions.length){
     document.getElementById("quiz").style.display="none";
     document.getElementById("result").style.display="block";
+    confetti(25);
     return;
   }
-
-  const q = questions[index];
-  document.getElementById("question").innerText = q.q;
-  const answers = document.getElementById("answers");
-  answers.innerHTML="";
-
-  q.a.forEach(ans=>{
+  const q=questions[step];
+  document.getElementById("question").innerText=q.q;
+  const a=document.getElementById("answers");
+  a.innerHTML="";
+  q.a.forEach(x=>{
     const b=document.createElement("button");
-    b.innerText=ans;
-    b.onclick=()=>check(ans,q.c);
-    answers.appendChild(b);
+    b.innerText=x;
+    b.onclick=()=>check(x,q.c);
+    a.appendChild(b);
   });
 }
 
-function check(ans,correct){
-  if(ans===correct){
-    showDigit(code[index]);
-    index++;
-    setTimeout(showQuestion,300);
-  }else{
-    alert("Spróbuj jeszcze raz 🙂");
+function check(ans,cor){
+  if(ans===cor){
+    showDigit(step);
+    confetti(10);
+    step++;
+    setTimeout(showQuestion,600);
+  }else alert("Spróbuj jeszcze raz 🙂");
+}
+
+function showDigit(i){
+  const s=document.createElement("span");
+  s.className="cifra";
+  s.innerText=code[i];
+  document.getElementById("code").appendChild(s);
+  setTimeout(()=>s.classList.add("show"),50);
+}
+
+function confetti(n){
+  for(let i=0;i<n;i++){
+    const d=document.createElement("div");
+    d.className="confetti";
+    d.style.left=Math.random()*100+"vw";
+    d.style.background=`hsl(${Math.random()*360},100%,50%)`;
+    document.body.appendChild(d);
+    setTimeout(()=>d.remove(),3000);
   }
 }
 
-function showDigit(d){
-  const span=document.createElement("span");
-  span.className="cifra";
-  span.innerText=d;
-  document.getElementById("code").appendChild(span);
-}
-
 function shuffle(a){
-  return a.sort(()=>Math.random()-0.5);
+  for(let i=a.length-1;i>0;i--){
+    const j=Math.floor(Math.random()*(i+1));
+    [a[i],a[j]]=[a[j],a[i]];
+  }
+  return a;
 }
 </script>
 
