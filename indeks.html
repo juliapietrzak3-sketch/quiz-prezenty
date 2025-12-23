@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+<meta charset="UTF-8">
+<title>Świąteczny Quiz z Kłódką</title>
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        background-image: url('https://images.unsplash.com/photo-1606813908769-3ef22b6c6b95?auto=format&fit=crop&w=1470&q=80');
+        background-size: cover;
+        background-position: center;
+        color: #fff;
+        text-align: center;
+        padding: 20px;
+    }
+    .quiz-container {
+        background: rgba(0,0,0,0.6);
+        padding: 20px;
+        border-radius: 10px;
+        display: inline-block;
+        max-width: 600px;
+    }
+    input {
+        padding: 10px;
+        font-size: 16px;
+        border-radius: 5px;
+        border: none;
+    }
+    button {
+        padding: 10px 20px;
+        font-size: 16px;
+        margin-left: 10px;
+        border-radius: 5px;
+        border: none;
+        cursor: pointer;
+        background-color: #ff6b6b;
+        color: #fff;
+    }
+    .code-display {
+        margin-top: 20px;
+        font-size: 24px;
+        letter-spacing: 5px;
+    }
+    #result {
+        margin-top: 10px;
+        font-size: 18px;
+    }
+</style>
+</head>
+<body>
+<div class="quiz-container">
+    <h1>Świąteczny Quiz z Kłódką</h1>
+    <div id="question-container">
+        <p id="question-text"></p>
+        <div>
+            <input type="text" id="answer-input" placeholder="Wpisz odpowiedź">
+            <button onclick="checkAnswer()">Sprawdź</button>
+        </div>
+    </div>
+    <div class="code-display" id="code-display">_ _ _</div>
+    <div id="result"></div>
+</div>
+
+<script>
+// Pula pytań świątecznych
+const allQuestions = [
+    {text: 'Ile reniferów ciągnie sanie Świętego Mikołaja?', answer: '8'},
+    {text: 'Który miesiąc ma 28 dni?', answer: 'luty'},
+    {text: 'Jeśli są 4 czerwone, 3 złote i 2 srebrne bombki – ile NIE jest zielonych?', answer: '9'},
+    {text: 'Jak nazywa się pomocnik Mikołaja, który mieszka na Biegunie Północnym?', answer: 'elf'},
+    {text: 'Ile świec jest w wieńcu adwentowym?', answer: '4'},
+    {text: 'Jak nazywa się tradycyjny niemiecki piernik świąteczny?', answer: 'lebkuchen'},
+    {text: 'Ile dni trwa Chanuka?', answer: '8'},
+    {text: 'Co wiesz o tradycyjnej polskiej kolędzie „Lulajże Jezuniu”? (prawda/fałsz: napisano w XVII w.)', answer: 'prawda'},
+    {text: 'W jakim kraju powstała pierwsza choinka w domu prywatnym?', answer: 'niemcy'},
+    {text: 'Jakiego koloru jest zwykle bombka w kształcie gwiazdy?', answer: 'złota'},
+    {text: 'Ile dni ma grudzień?', answer: '31'},
+    {text: 'Ile ptaków w piosence „Dwanaście dni świąt” dostało w prezencie?', answer: '12'},
+    {text: 'Które zwierzę nie jest typowo świąteczne: renifer, niedźwiedź, sowa?', answer: 'sowa'},
+    {text: 'Jaka roślina jest symbolem świąt i często wieszana nad drzwiami?', answer: 'jemioła'},
+    {text: 'Ile nocy trwa Wigilia Bożego Narodzenia według tradycji polskiej?', answer: '1'},
+    {text: 'W jakim kraju powstała pierwsza kartka świąteczna?', answer: 'anglia'},
+    {text: 'Co symbolizuje Gwiazda Betlejemska?', answer: 'nadzieję'},
+    {text: 'Ile osób według tradycji spotyka się przy wigilijnym stole?', answer: 'rodzina'},
+    {text: 'Jakiego koloru jest tradycyjny mikołajowy strój?', answer: 'czerwony'},
+    {text: 'Ile prezentów daje Święty Mikołaj w typowej opowieści wigilijnej?', answer: 'wiele'},
+];
+
+// Losowo wybieramy 3 pytania dla tej rundy
+let quizQuestions = allQuestions.sort(() => Math.random() - 0.5).slice(0,3);
+
+let currentIndex = 0;
+let code = ['_', '_', '_'];
+
+function showQuestion() {
+    if(currentIndex >= quizQuestions.length){
+        document.getElementById('question-container').innerHTML = '<h2>Koniec quizu! Kod do prezentu: ' + code.join('') + '</h2>';
+        return;
+    }
+    document.getElementById('question-text').innerText = quizQuestions[currentIndex].text;
+    document.getElementById('answer-input').value = '';
+    document.getElementById('result').innerText = '';
+}
+
+function checkAnswer(){
+    const answer = document.getElementById('answer-input').value.toLowerCase().trim();
+    const correctAnswer = quizQuestions[currentIndex].answer.toLowerCase().trim();
+    if(answer === correctAnswer){
+        code[currentIndex] = Math.floor(Math.random() * 10); // losowa cyfra dla tej odpowiedzi
+        document.getElementById('code-display').innerText = code.join(' ');
+        document.getElementById('result').innerText = 'Poprawnie!';
+        currentIndex++;
+        setTimeout(showQuestion, 800);
+    } else {
+        document.getElementById('result').innerText = 'Spróbuj jeszcze raz!';
+    }
+}
+
+showQuestion();
+</script>
+</body>
+</html>
