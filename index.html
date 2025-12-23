@@ -175,18 +175,17 @@ function showQuestion(){
 
 function checkAnswer(answer, correct){
   if(answer===correct){
-    revealDigit(digitsRevealed);
-    launchConfetti(digitsRevealed===questions.length-1?50:10);
-    document.getElementById("ding").play();
+    revealDigit(digitsRevealed);  // pokazujemy cyfrę dla aktualnego pytania
+    launchConfetti(10);
     digitsRevealed++;
     setTimeout(()=>showQuestion(),500);
   } else alert("Spróbuj jeszcze raz!");
 }
 
 function revealDigit(index){
-  const codeDiv=document.getElementById("code");
+  const codeDiv = document.getElementById("code");
   if(codeDiv.children[index]) return;
-  const span=document.createElement("span");
+  const span = document.createElement("span");
   span.className="cifra";
   span.innerText=code[index];
   codeDiv.appendChild(span);
