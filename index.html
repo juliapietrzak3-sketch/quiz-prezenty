@@ -66,20 +66,20 @@ button{
   opacity:0;
   transform:scale(0.5); rotate(0deg);
   transition:all 0.5s ease;
-}
-
-@keyframes bounceRotate {
-  0%, 100% { transform: translateY(0) rotate(0deg); }
-  50% { transform: translateY(-15px) rotate(20deg); }
+  transform-origin:center;
 }
 
 .cifra.show{
-  opacity: 1;
-  transform: scale(1.2);
-  animation: bounceRotate 0.5s ease;
+  opacity:1;
+  animation: bounceRotate 0.5s ease forwards;
 }
 
-.confetti{
+@keyframes bounceRotate {
+  0%,100% { transform: translateY(0) rotate(0deg); }
+  50% { transform: translateY(-15px) rotate(20deg); }
+}
+
+  .confetti{
   position:fixed;
   width:10px;
   height:10px;
@@ -94,7 +94,9 @@ button{
 </head>
   
 <body>
-
+  
+<audio id="ding" src="https://actions.google.com/sounds/v1/cartoon/clang_and_wobble.ogg"></audio>
+  
 <h1>🎁 Świąteczny Quiz – Otwórz Prezent 🎄</h1>
 <p>Wybierz swój symbol</p>
 
