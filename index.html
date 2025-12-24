@@ -230,7 +230,7 @@ function createBombka(){
   const colors = ["#c62828","#2e7d32","#ffd700","#ff5722","#4caf50","#fdd835"];
   b.style.backgroundColor = colors[Math.floor(Math.random()*colors.length)];
   b.style.left = Math.random() * 100 + "vw";
-  b.style.animationDuration = (3 + Math.random()*2) + "s";
+  b.style.animation = `spadaj ${3 + Math.random()*2}s linear infinite, migotanie 1s infinite alternate`;
   document.body.appendChild(b);
   setTimeout(() => b.remove(), 4000);
 }
