@@ -69,13 +69,14 @@ button{
 }
 
 @keyframes bounceRotate {
-  0%,100% { transform: translateY(0) rotate(0deg); }
+  0%, 100% { transform: translateY(0) rotate(0deg); }
   50% { transform: translateY(-15px) rotate(20deg); }
 }
-  
+
 .cifra.show{
-  opacity:1;
-  animation: bounce 0.5s;
+  opacity: 1;
+  transform: scale(1.2);
+  animation: bounceRotate 0.5s ease;
 }
 
 .confetti{
@@ -93,8 +94,6 @@ button{
 </head>
   
 <body>
-
-<audio id="ding" src="https://actions.google.com/sounds/v1/cartoon/clang_and_wobble.ogg"></audio>
 
 <h1>🎁 Świąteczny Quiz – Otwórz Prezent 🎄</h1>
 <p>Wybierz swój symbol</p>
@@ -187,10 +186,13 @@ function showQuestion(){
 function check(ans,cor){
   if(ans===cor){
     showDigit(step);
+    document.getElementById("ding").play();      
     confetti(10);
     step++;
     setTimeout(showQuestion,600);
-  }else alert("Spróbuj jeszcze raz 🙂");
+  } else {
+    alert("Spróbuj jeszcze raz 🙂");
+  }
 }
 
 function showDigit(i){
